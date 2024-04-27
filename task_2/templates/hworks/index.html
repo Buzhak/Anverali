@@ -1,0 +1,14 @@
+{% extends 'base.html' %} 
+{% block content %}
+  <div class="container py-5">
+    {% if user.is_authenticated %}
+      {% if user.is_freelancer %}
+        <h1>Добро пожаловать Фрилансер!</h1>
+      {% else %}
+        <h1>Добро пожаловать Продавец!</h1>
+      {% endif %}
+    {% else %}
+      <h1>Зайдите на сайт!</h1>
+    {% endif %}
+  </div> 
+{% endblock %}

@@ -1,0 +1,55 @@
+{% load static %}
+<nav class="navbar navbar-light" style="background-color: #333333">
+    <div class="container">
+    <a class="navbar-brand" href="{% url 'hworks:index' %}">
+        <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+        <span style="color:white">works</span>
+    </a>
+    <ul class="nav nav-pills">
+      <li class="nav-item">   
+        <a class="nav-link {% if request.resolver_match.view_name  == 'hworks:index' %} active {% endif %}" href="{% url 'hworks:index' %}">Главная</a>
+    </li>
+    <li class="nav-item"> 
+      <a class="nav-link">Написать пост</a>
+  </li>
+    <li class="nav-item"> 
+      <a class="nav-link">О проекте</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link">Технологии</a>
+    </li>
+    {% if user.is_authenticated %}
+    <li class="nav-item">
+      <form id="change_status_form" action="{% url 'users:change_status' user.username %}" method="post">
+        {% csrf_token %}
+      </form>
+      <a class="nav-link link-light {% if request.resolver_match.view_name  == 'users:change_status' %} active {% endif %}" onclick="document.getElementById('change_status_form').submit();">
+        <span style="color: red">
+          {% if user.is_freelancer %}
+          я покупатель
+          {% else %}
+          я продавец
+          {% endif %}
+        </span>
+      </a> 
+    </li>
+    <li class="nav-item">
+      <form id="logout_form" action="{% url 'users:logout' %}" method="post">
+        {% csrf_token %}
+      </form>
+      <a class="nav-link link-light {% if request.resolver_match.view_name  == 'users:logout' %} active {% endif %}" onclick="document.getElementById('logout_form').submit();">Выйти</a> 
+    </li>
+    <li>
+      <span style="color: white">Пользователь: {{ user.username }}</span>
+    </li>
+    {% else %}
+    <li class="nav-item"> 
+        <a class="nav-link link-light {% if request.resolver_match.view_name  == 'users:signup' %} active {% endif %}" href="{% url 'users:signup' %}">Регистрация</a>
+    </li>
+    <li class="nav-item"> 
+        <a class="nav-link link-light {% if request.resolver_match.view_name  == 'users:login' %} active {% endif %}" href="{% url 'users:login' %}">Войти</a>
+    </li>
+    {% endif %}
+  </ul>
+  </div>
+</nav>      
