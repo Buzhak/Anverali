@@ -1,0 +1,21 @@
+{% extends 'base.html' %} 
+{% block content %}
+<div class="container py-5">
+    Данные пользователя: <b>{{ user.username }}</b><br/>
+    Статус:
+    <b>
+        {% if user.is_freelancer %}
+            Продавец
+        {% else %}
+            Покупатель
+        {% endif %}
+    </b><br/>
+    Имя: {{ user.first_name }}<br/>
+    Фамилия: {{ user.last_name }}<br/>
+    Почта: {{ user.email }}<br/>
+    {% if user.is_freelancer %}
+        Опыт: {{ user.exp }}<br/>
+    {% endif %}
+    <a href="{% url 'users:user_update' user.username %}">Редактировать профиль</a><br/>
+</div>
+{% endblock %}

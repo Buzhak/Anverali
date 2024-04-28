@@ -15,10 +15,10 @@
     <li class="nav-item"> 
       <a class="nav-link">О проекте</a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link">Технологии</a>
-    </li>
     {% if user.is_authenticated %}
+    <li class="nav-item">
+      <a class="nav-link {% if request.resolver_match.view_name  == 'hworks:profile' %} active {% endif %}" href="{% url 'hworks:profile' user.username %}">Мой профиль</a>
+    </li>
     <li class="nav-item">
       <form id="change_status_form" action="{% url 'users:change_status' user.username %}" method="post">
         {% csrf_token %}
@@ -26,9 +26,9 @@
       <a class="nav-link link-light {% if request.resolver_match.view_name  == 'users:change_status' %} active {% endif %}" onclick="document.getElementById('change_status_form').submit();">
         <span style="color: red">
           {% if user.is_freelancer %}
-          я покупатель
+          Я покупатель
           {% else %}
-          я продавец
+          Я продавец
           {% endif %}
         </span>
       </a> 
