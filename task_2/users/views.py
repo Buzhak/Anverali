@@ -42,7 +42,8 @@ def user_update(request, username):
         else:
             form = ShortUserForm(instance=user)
         template = 'users/edit.html'
-        return render(request, template, {'form': form})
+        context = {'form': form, 'username': user.get_username()}
+        return render(request, template, context)
     elif request.method == 'POST':
         if user.is_freelancer:
             form = FullUserForm(request.POST, instance=user)
@@ -50,7 +51,7 @@ def user_update(request, username):
             form = ShortUserForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('hworks:index')
+            return redirect('hworks:profile', username=user.username)
     else:
         return HttpResponse('Метод запроса не поддерживается.', status=405)
     

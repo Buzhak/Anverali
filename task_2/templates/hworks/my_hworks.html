@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <p style="background-color: #157347; color: white; text-align: center">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+  <div class="container py-5">
+    {% if user.is_authenticated %}
+        {% if user.is_freelancer %}
+            <h3>Ваши Хворки:</h3>
+            <a class="btn btn-success" href="{% url 'hworks:hwork_create' %}">Cоздать новый Hwork</a>
+            <hr>
+            {% if hworks|length == 0 %}
+                Тут пока пусто
+            {% else %}
+                {% for hwork in hworks %}
+                <article>
+                <h5>{{ hwork.title }}</h5>
+                <ul>
+                    <li>
+                        Продавец: <a href= "{% url 'hworks:profile' hwork.user %}">{{ hwork.user }}</a>
+                    </li>
+                    <li>
+                        Группа: {{ hwork.group }}
+                    </li>
+                    <li>
+                        Стоимость: {{ hwork.price }}
+                    </li>
+                    <li>
+                    <a href="{% url 'hworks:hwork_list' hwork.user %}">Другие хворки продавца</a><br/>
+                    </li>
+                    {% if user == hwork.user %}
+                    <li>
+                    <a href="{% url 'hworks:hwork_update' hwork.id %}">Редактировать</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                Описание:</br>
+                <p>{{ hwork.description }}</p>
+                </article>
+                {% if not forloop.last %}<hr>{% endif %}
+                {% endfor %}
+            {% endif %}
+            {% else %}
+            <h1>Вы не продавец!</h1>
+        {% endif %}
+    {% else %}
+        <h1>Зайдите на сайт!</h1>
+    {% endif %}
+</div> 
+{% endblock %}

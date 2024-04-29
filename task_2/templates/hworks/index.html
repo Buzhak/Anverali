@@ -3,9 +3,42 @@
   <div class="container py-5">
     {% if user.is_authenticated %}
       {% if user.is_freelancer %}
-        <h1>Добро пожаловать Фрилансер!</h1>
+        <h3>Добро пожаловать {{ user.username }}</h3>
+        <h4>Ваши заказы активные заказы:</h4></br>
+          {%if orders|length == 0 %}
+            Тут пока пусто
+          {% else %}
+            {% for order in orders %}
+            <article>
+            <h5>{{ order.title }}</h5>
+            <ul>
+                <li>
+                  Заказчик: <a href="{% url 'hworks:profile' order.customer %}">{{ order.customer }}</a>
+                </li>
+                <li>
+                  Hwork: {{ order.hwork }}
+                </li>
+                <li>
+                  Стоимость: {{ order.price }}
+                </li>
+                <li>
+                  Статус: 
+                  {% if order.is_ready %}
+                    Готов
+                  {% else %}
+                    В работе
+                  {% endif %}
+                </li>
+            </ul>
+            Описание:</br>
+            <p>{{ order.description }}</p>
+            </article>
+            {% if not forloop.last %}<hr>{% endif %}
+            {% endfor %}
+          {% endif %}
+
       {% else %}
-        <h1>Добро пожаловать Покупатель!</h1>
+        <h3>Добро пожаловать покупатель!</h3>
       {% endif %}
     {% else %}
       <h1>Зайдите на сайт!</h1>

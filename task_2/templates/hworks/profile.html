@@ -1,21 +1,26 @@
 {% extends 'base.html' %} 
 {% block content %}
 <div class="container py-5">
-    Данные пользователя: <b>{{ user.username }}</b><br/>
+    Данные пользователя: <b>{{ user_profile.username }}</b><br/>
     Статус:
     <b>
-        {% if user.is_freelancer %}
+        {% if user_profile.is_freelancer %}
             Продавец
         {% else %}
             Покупатель
         {% endif %}
     </b><br/>
-    Имя: {{ user.first_name }}<br/>
-    Фамилия: {{ user.last_name }}<br/>
-    Почта: {{ user.email }}<br/>
-    {% if user.is_freelancer %}
+    Имя: {{ user_profile.first_name }}<br/>
+    Фамилия: {{ user_profile.last_name }}<br/>
+    Почта: {{ user_profile.email }}<br/>
+    {% if user_profile.is_freelancer %}
         Опыт: {{ user.exp }}<br/>
     {% endif %}
-    <a href="{% url 'users:user_update' user.username %}">Редактировать профиль</a><br/>
+    {% if user_profile.is_freelancer %}
+    <a href="{% url 'hworks:hwork_list' user_profile.username %}">Хворки пользователя</a><br/>
+    {% endif %}
+    {% if user_profile.username == user.username %}
+        <a href="{% url 'users:user_update' user.username %}">Редактировать профиль</a><br/>
+    {% endif %}
 </div>
 {% endblock %}
