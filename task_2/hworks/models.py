@@ -4,9 +4,9 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class BaseModel(models.Model):
-    title = models.CharField('Название',max_length=200)
 
+class BaseModel(models.Model):
+    title = models.CharField('Название', max_length=100)
 
     class Meta:
         abstract = True
@@ -16,8 +16,12 @@ class BaseModel(models.Model):
 
 
 class Group(BaseModel):
-    description = models.TextField('Описание группы')
-    
+    description = models.CharField('Описание группы', max_length=200)
+
+    class Meta:
+        verbose_name = 'Группу'
+        verbose_name_plural = 'Группы'
+
 
 class Hwork(BaseModel):
     description = models.TextField('Описание')
@@ -26,7 +30,7 @@ class Hwork(BaseModel):
         User,
         on_delete=models.CASCADE,
         related_name='%(class)ss',
-        verbose_name='Пользователь'
+        verbose_name='Продавец'
     )
     group = models.ForeignKey(
         Group,
@@ -38,9 +42,16 @@ class Hwork(BaseModel):
     )
     is_archived = models.BooleanField('Hwork в архиве', default=False)
 
+    class Meta:
+        verbose_name = 'Хворк'
+        verbose_name_plural = 'Хворки'
+
 
 class Order(BaseModel):
-    description = models.TextField(verbose_name='Техническое задание', help_text='Опишите техническое задание как можно подробнее')
+    description = models.TextField(
+        verbose_name='Техническое задание',
+        help_text='Опишите техническое задание как можно подробнее'
+    )
     start_date = models.DateTimeField(auto_now_add=True)
     price = models.PositiveIntegerField('Стоимость')
     customer = models.ForeignKey(
@@ -49,6 +60,7 @@ class Order(BaseModel):
         related_name='%(class)ss',
         verbose_name='Заказчик'
     )
+    seller = models.CharField('Продавец', max_length=100)
     hwork = models.ForeignKey(
         Hwork,
         on_delete=models.SET_NULL,
@@ -59,3 +71,7 @@ class Order(BaseModel):
     )
     is_ready = models.BooleanField(verbose_name='Заказ сделан', default=False)
     is_finished = models.BooleanField(verbose_name='Заказ закрыт', default=False)
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'

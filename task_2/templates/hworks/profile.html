@@ -21,6 +21,7 @@
     {% endif %}
     {% if user_profile.username == user.username %}
         <a href="{% url 'users:user_update' user.username %}">Редактировать профиль</a><br/>
+        <a href="{% url 'users:password_change' %}">Изменить пароль</a><br/>
     {% endif %}
 </div>
 {% endblock %}

@@ -1,12 +1,12 @@
-from django.views.generic import CreateView, UpdateView, ListView
-from django.urls import reverse_lazy
 from django.contrib import messages
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user_model
-from django.http import Http404, HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.http import Http404, HttpResponseForbidden
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import CreateView, UpdateView, ListView
 
 from .forms import CreateHworkForm, CreatOrderForm
 from .models import Hwork, Order
@@ -21,8 +21,10 @@ def index_view(request):
     template = 'hworks/index.html'
     context = {}
     if request.user.is_authenticated:
-        if request.user.is_freelancer:  
-            orders = Order.objects.prefetch_related("hwork").filter(hwork__user=request.user, is_finished=False)
+        if request.user.is_freelancer:
+            orders = Order.objects.prefetch_related("hwork").filter(
+                hwork__user=request.user, is_finished=False
+            )
             context = {
                 'orders': orders
             }
@@ -68,6 +70,7 @@ class HworkList(ListView):
     Model = Hwork
     template_name = 'hworks/hwork_list.html'
     context_object_name = 'hworks'
+
     def get_queryset(self):
         return Hwork.objects.filter(is_archived=False).all()
 
@@ -113,6 +116,7 @@ class HworkCreate(CreateView):
     form_class = CreateHworkForm
     success_url = reverse_lazy('hworks:my_hworks')
     template_name = 'hworks/hwork_create.html'
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         messages.success(self.request, 'Новый Hwork создан!')
@@ -128,11 +132,14 @@ class HworkUpdate(UpdateView):
     fields = ['title', 'description', 'price', 'group']
     success_url = reverse_lazy('hworks:my_hworks')
     template_name = 'hworks/hwork_update.html'
+
     def get_object(self, queryset=None):
+
         obj = super(HworkUpdate, self).get_object()
         if not obj.user == self.request.user:
             raise PermissionDenied()
         return obj
+
     def form_valid(self, form):
         messages.success(self.request, 'Hwork успешно обновлен!')
         return super().form_valid(form)
@@ -144,13 +151,17 @@ def orders_list_view(request):
     view заказов пользователя
     '''
     template_name = 'hworks/order_list.html'
-    if request.user.is_freelancer:  
-        orders = Order.objects.prefetch_related("hwork").filter(hwork__user=request.user)
+    if request.user.is_freelancer:
+        orders = Order.objects.prefetch_related("hwork").filter(
+            hwork__user=request.user
+        )
         context = {
             'orders': orders,
         }
     else:
-        orders = Order.objects.filter(customer=request.user).select_related('hwork__user')
+        orders = Order.objects.filter(
+            customer=request.user
+        ).select_related('hwork__user')
         context = {
             'orders': orders
         }
@@ -164,7 +175,10 @@ def order_ready_view(request, pk):
     '''
     if request.method == 'POST':
         previous_url = request.META.get('HTTP_REFERER')
-        order = Order.objects.filter(pk=pk, is_finished=False).select_related('hwork__user').first()
+        order = Order.objects.filter(
+            pk=pk,
+            is_finished=False
+        ).select_related('hwork__user').first()
         if not order:
             raise Http404('Заказ не найден')
         if order.hwork.user == request.user:
@@ -184,7 +198,7 @@ def order_finished_view(request, pk):
     '''
     if request.method == 'POST':
         previous_url = request.META.get('HTTP_REFERER')
-        order = Order.objects.filter(pk=pk, is_ready=True ,is_finished=False).first()
+        order = Order.objects.filter(pk=pk, is_ready=True, is_finished=False).first()
         if not order:
             raise Http404('Заказ не найден')
         if order.customer == request.user:
@@ -205,6 +219,8 @@ def create_order_view(request, pk):
     if request.user.is_freelancer:
         return HttpResponseForbidden()
     hwork = get_object_or_404(Hwork, pk=pk)
+    if request.user == hwork.user:
+        return HttpResponseForbidden()
     if request.method == 'GET':
         order_from = CreatOrderForm()
         template = 'hworks/create_order.html'
@@ -217,5 +233,6 @@ def create_order_view(request, pk):
             order_form.instance.price = hwork.price
             order_form.instance.customer = request.user
             order_form.instance.hwork = hwork
+            order_form.instance.seller = hwork.user.get_username()
             order_form.save()
             return redirect('hworks:orders_list')

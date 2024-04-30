@@ -19,7 +19,7 @@
         <a href="{% url 'hworks:hwork_user_list' hwork.user %}"> Другие хворки продавца</a><br/>
         </li>
     </ul>
-    {% if user.is_authenticated and user.is_freelancer == False %}
+    {% if user.is_authenticated and user.is_freelancer == False and user != hwork.user%}
         <a class="btn btn-success" href= "{% url 'hworks:create_order' hwork.id %}">Заказать</a></br>
     {% endif %}
     Описание:</br>

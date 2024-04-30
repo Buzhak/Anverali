@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
@@ -23,3 +24,7 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('auth/', include('django.contrib.auth.urls')),
 ]
+
+admin.sites.AdminSite.site_header = settings.ADMIN_SITE_HEADER
+admin.sites.AdminSite.site_title = settings.ADMIN_SITE_HEADER
+admin.sites.AdminSite.index_title = settings.ADMIN_SITE_HEADER

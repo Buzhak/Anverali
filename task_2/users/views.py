@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -21,12 +21,9 @@ def change_status(request, username):
     Пользователь может изменить свой статус с продовца на покупателя
     '''
     if request.method == 'POST':
-        previous_url = request.META.get('HTTP_REFERER')
         user = get_object_or_404(User, username=username)
         user.is_freelancer = not user.is_freelancer
         user.save()
-        if previous_url:
-            return redirect(previous_url)
         return redirect('hworks:index')
 
 

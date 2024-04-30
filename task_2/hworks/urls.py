@@ -20,9 +20,17 @@ urlpatterns = [
         views.HworkUpdate.as_view(),
         name='hwork_update'
     ),
-    path('hwork/hwork_archive/<int:pk>/',  views.hwork_archive_view, name='hwork_archive'),
+    path(
+        'hwork/hwork_archive/<int:pk>/',
+        views.hwork_archive_view,
+        name='hwork_archive'
+    ),
     path('order/list/', views.orders_list_view, name='orders_list'),
     path('order/order_ready/<int:pk>/', views.order_ready_view, name='order_ready'),
-    path('order/order_finished/<int:pk>/', views.order_finished_view, name='order_finished'),
+    path(
+        'order/order_finished/<int:pk>/',
+        views.order_finished_view,
+        name='order_finished'
+    ),
     path('order/create_order/<int:pk>/', views.create_order_view, name='create_order'),
 ]

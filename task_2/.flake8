@@ -1,0 +1,3 @@
+[flake8]
+exclude = venv, migrations, settings.py, apps.py, tests.py,
+max-line-length = 88
