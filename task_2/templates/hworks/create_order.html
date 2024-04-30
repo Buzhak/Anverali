@@ -1,0 +1,77 @@
+{% extends 'base.html' %} 
+{% block title %}
+    Сделать заказ
+{% endblock %}
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-8 p-5">
+      <div class="card">
+        <div class="card-header">Сделать заказ</div>
+          <div class="card-body">
+            <article>
+              <h5>{{ hwork.title }}</h5>
+              <ul>
+                  <li>
+                      Продавец: 
+                      {% if user.is_authenticated %}<a href= "{% url 'hworks:profile' hwork.user %}">{{ hwork.user }}</a>{% else %}{{ hwork.user }}{% endif %}
+                  </li>
+                  <li>
+                      Группа: {{ hwork.group }}
+                  </li>
+                  <li>
+                      Стоимость: {{ hwork.price }}
+                  </li>
+                  <li>
+                  <a href="{% url 'hworks:hwork_user_list' hwork.user %}"> Другие хворки продавца</a><br/>
+                  </li>
+              </ul>
+              Описание:</br>
+              <p>{{ hwork.description }}</p>
+            </article>
+            <hr>
+              {% if form.errors %}
+                  {% for field in form %} 
+                    {% for error in field.errors %}            
+                      <div class="alert alert-danger">
+                        {{ error|escape }}
+                      </div>
+                    {% endfor %}
+                  {% endfor %}
+                  {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                      {{ error|escape }}
+                    </div>
+                  {% endfor %}
+              {% endif %}
+              <form method="post" action="{% url 'hworks:create_order' hwork.id%}">
+              {% csrf_token %}
+              {% for field in form %} 
+                <div class="form-group row my-3">
+                  <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                      {% if field.field.required %}
+                        <span class="required text-danger">*</span>
+                      {% endif %}
+                  </label>
+                  {{ field }}
+                    {% if field.help_text %}
+                      <small 
+                         id="{{ field.id_for_label }}-help"
+                         class="form-text text-muted"
+                      >
+                        {{ field.help_text|safe }}
+                      </small>
+                    {% endif %}
+                </div>
+              {% endfor %}
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">
+                  Заказать
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  </div>
+{% endblock %}

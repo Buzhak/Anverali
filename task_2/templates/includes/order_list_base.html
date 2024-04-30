@@ -45,7 +45,7 @@
                 <form id="is_finished_form_{{ order.id }}" action="{% url 'hworks:order_finished' order.id %}" method="post">
                     {% csrf_token %}
                 </form>
-                <a class="btn btn-success" onclick="document.getElementById('is_finished_form_{{ order.id }}').submit();">Работа сделана</a>
+                <a class="btn btn-success" onclick="document.getElementById('is_finished_form_{{ order.id }}').submit();">Закрыть заказ</a>
             </li>
             {% endif %}
         </ul>

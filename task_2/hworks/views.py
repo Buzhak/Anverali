@@ -5,10 +5,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user_model
-from django.http import Http404, HttpResponseForbidden, HttpResponseNotAllowed
+from django.http import Http404, HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
 
-from .forms import CreateHworkForm, HworkForm
+from .forms import CreateHworkForm, CreatOrderForm
 from .models import Hwork, Order
 
 User = get_user_model()
@@ -103,8 +103,6 @@ def hwork_archive_view(request, pk):
             return redirect('hworks:index')
         else:
             return HttpResponseForbidden()
-    else:
-        return HttpResponseNotAllowed('POST')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -177,9 +175,7 @@ def order_ready_view(request, pk):
             return redirect('hworks:index')
         else:
             return HttpResponseForbidden()
-    else:
-        return HttpResponseNotAllowed('POST')
-    
+
 
 @login_required
 def order_finished_view(request, pk):
@@ -199,5 +195,27 @@ def order_finished_view(request, pk):
             return redirect('hworks:index')
         else:
             return HttpResponseForbidden()
-    else:
-        return HttpResponseNotAllowed('POST')
+
+
+@login_required
+def create_order_view(request, pk):
+    '''
+    view создание заказа
+    '''
+    if request.user.is_freelancer:
+        return HttpResponseForbidden()
+    hwork = get_object_or_404(Hwork, pk=pk)
+    if request.method == 'GET':
+        order_from = CreatOrderForm()
+        template = 'hworks/create_order.html'
+        context = {'form': order_from, 'hwork': hwork}
+        return render(request, template, context)
+    if request.method == 'POST':
+        order_form = CreatOrderForm(request.POST)
+        if order_form.is_valid():
+            order_form.instance.title = hwork.title
+            order_form.instance.price = hwork.price
+            order_form.instance.customer = request.user
+            order_form.instance.hwork = hwork
+            order_form.save()
+            return redirect('hworks:orders_list')

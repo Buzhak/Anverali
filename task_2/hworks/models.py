@@ -40,7 +40,7 @@ class Hwork(BaseModel):
 
 
 class Order(BaseModel):
-    description = models.TextField('Описание')
+    description = models.TextField(verbose_name='Техническое задание', help_text='Опишите техническое задание как можно подробнее')
     start_date = models.DateTimeField(auto_now_add=True)
     price = models.PositiveIntegerField('Стоимость')
     customer = models.ForeignKey(

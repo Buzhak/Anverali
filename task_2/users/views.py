@@ -2,7 +2,6 @@ from django.views.generic import CreateView, UpdateView
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 
 from .forms import CreateUserForm, FullUserForm, ShortUserForm
@@ -29,19 +28,6 @@ def change_status(request, username):
         if previous_url:
             return redirect(previous_url)
         return redirect('hworks:index')
-    else:
-        return HttpResponse('Метод запроса не поддерживается.', status=405)
-    
-
-@login_required
-def profile_view(request, username):
-    '''
-    view профиля пользователя username
-    '''
-    user = get_object_or_404(User, username=username)
-    context = {'user_profile': user}
-    template = 'hworks/profile.html'
-    return render(request, template, context)
 
 
 @login_required
@@ -49,20 +35,17 @@ def user_update(request, username):
     user = get_object_or_404(User, username=username)
     if request.method == 'GET':
         if user.is_freelancer:
-            form = FullUserForm(instance=user)
+            user_form = FullUserForm(instance=user)
         else:
-            form = ShortUserForm(instance=user)
+            user_form = ShortUserForm(instance=user)
         template = 'users/edit.html'
-        context = {'form': form, 'username': user.get_username()}
+        context = {'form': user_form, 'username': user.get_username()}
         return render(request, template, context)
     elif request.method == 'POST':
         if user.is_freelancer:
-            form = FullUserForm(request.POST, instance=user)
+            user_form = FullUserForm(request.POST, instance=user)
         else:
-            form = ShortUserForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
+            user_form = ShortUserForm(request.POST, instance=user)
+        if user_form.is_valid():
+            user_form.save()
             return redirect('hworks:profile', username=user.username)
-    else:
-        return HttpResponse('Метод запроса не поддерживается.', status=405)
-    

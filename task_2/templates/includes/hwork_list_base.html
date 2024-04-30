@@ -20,7 +20,7 @@
         </li>
     </ul>
     {% if user.is_authenticated and user.is_freelancer == False %}
-        <a class="btn btn-success">Заказать</a></br>
+        <a class="btn btn-success" href= "{% url 'hworks:create_order' hwork.id %}">Заказать</a></br>
     {% endif %}
     Описание:</br>
     <p>{{ hwork.description }}</p>
