@@ -17,7 +17,7 @@
         Опыт: {{ user.exp }}<br/>
     {% endif %}
     {% if user_profile.is_freelancer %}
-    <a href="{% url 'hworks:hwork_list' user_profile.username %}">Хворки пользователя</a><br/>
+    <a href="{% url 'hworks:hwork_user_list' user_profile.username %}">Хворки пользователя</a><br/>
     {% endif %}
     {% if user_profile.username == user.username %}
         <a href="{% url 'users:user_update' user.username %}">Редактировать профиль</a><br/>

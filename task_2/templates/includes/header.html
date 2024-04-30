@@ -11,12 +11,16 @@
     </li>
     {% if user.is_authenticated %}
     {% if user.is_freelancer %}
+   
+    <li class="nav-item"> 
+      <a class="nav-link {% if request.resolver_match.view_name  == 'hworks:hwork_ist' %} active {% endif %}" href="{% url 'hworks:hwork_ist' %}">Биржа хворков</a>
+    </li>
     <li class="nav-item"> 
       <a class="nav-link {% if request.resolver_match.view_name  == 'hworks:my_hworks' %} active {% endif %}" href="{% url 'hworks:my_hworks' %}">Мои Хворки</a>
     </li>
     {% endif %}
     <li class="nav-item"> 
-      <a class="nav-link">Заказы</a>
+      <a class="nav-link {% if request.resolver_match.view_name  == 'hworks:orders_list' %} active {% endif %}" href="{% url 'hworks:orders_list' %}">Заказы</a>
     </li>
     <li class="nav-item">
       <a class="nav-link {% if request.resolver_match.view_name  == 'hworks:profile' %} active {% endif %}" href="{% url 'hworks:profile' user.username %}">Мой профиль</a>

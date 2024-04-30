@@ -31,6 +31,17 @@ def change_status(request, username):
         return redirect('hworks:index')
     else:
         return HttpResponse('Метод запроса не поддерживается.', status=405)
+    
+
+@login_required
+def profile_view(request, username):
+    '''
+    view профиля пользователя username
+    '''
+    user = get_object_or_404(User, username=username)
+    context = {'user_profile': user}
+    template = 'hworks/profile.html'
+    return render(request, template, context)
 
 
 @login_required

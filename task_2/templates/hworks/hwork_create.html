@@ -22,7 +22,6 @@
                     </div>
                   {% endfor %}
               {% endif %}
-
               <form method="post" action="{% url 'hworks:hwork_create' %}">
               {% csrf_token %}
               {% for field in form %} 

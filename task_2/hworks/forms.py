@@ -7,3 +7,9 @@ class CreateHworkForm(ModelForm):
     class Meta:
         model = Hwork
         fields = ('title', 'description', 'price', 'group')
+
+
+class HworkForm(ModelForm):
+    class Meta:
+        model = Hwork
+        fields = ('title', 'description', 'price', 'group', 'user')

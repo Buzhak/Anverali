@@ -36,6 +36,7 @@ class Hwork(BaseModel):
         null=True,
         verbose_name='Группа'
     )
+    is_archived = models.BooleanField('Hwork в архиве', default=False)
 
 
 class Order(BaseModel):

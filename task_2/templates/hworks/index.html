@@ -4,44 +4,15 @@
     {% if user.is_authenticated %}
       {% if user.is_freelancer %}
         <h3>Добро пожаловать {{ user.username }}</h3>
-        <h4>Ваши заказы активные заказы:</h4></br>
-          {%if orders|length == 0 %}
-            Тут пока пусто
-          {% else %}
-            {% for order in orders %}
-            <article>
-            <h5>{{ order.title }}</h5>
-            <ul>
-                <li>
-                  Заказчик: <a href="{% url 'hworks:profile' order.customer %}">{{ order.customer }}</a>
-                </li>
-                <li>
-                  Hwork: {{ order.hwork }}
-                </li>
-                <li>
-                  Стоимость: {{ order.price }}
-                </li>
-                <li>
-                  Статус: 
-                  {% if order.is_ready %}
-                    Готов
-                  {% else %}
-                    В работе
-                  {% endif %}
-                </li>
-            </ul>
-            Описание:</br>
-            <p>{{ order.description }}</p>
-            </article>
-            {% if not forloop.last %}<hr>{% endif %}
-            {% endfor %}
-          {% endif %}
-
+        <h4>Ваши активные заказы:</h4></br>
+        {% include 'includes/order_list_base.html' %}
       {% else %}
-        <h3>Добро пожаловать покупатель!</h3>
+        <h3>Добро пожаловать {{ user.username }}</h3>
+        <h4>Все хворки:</h4></br>
+        {% include 'includes/hwork_list_base.html'%}
       {% endif %}
     {% else %}
-      <h1>Зайдите на сайт!</h1>
+      {% include 'includes/hwork_list_base.html'%}
     {% endif %}
   </div> 
 {% endblock %}

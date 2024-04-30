@@ -27,15 +27,23 @@
                     <li>
                         Стоимость: {{ hwork.price }}
                     </li>
+                        {% if user == hwork.user %}
                     <li>
-                    <a href="{% url 'hworks:hwork_list' hwork.user %}">Другие хворки продавца</a><br/>
-                    </li>
-                    {% if user == hwork.user %}
-                    <li>
-                    <a href="{% url 'hworks:hwork_update' hwork.id %}">Редактировать</a>
+                        Статус: {% if hwork.is_archived %}<span style="color: red">В архиве{% else %}<span style="color: green">Активен</span>{% endif %}</span>
                     </li>
                     {% endif %}
                 </ul>
+                <form id="is_archived_form_{{ hwork.id}}" action="{% url 'hworks:hwork_archive' hwork.id %}" method="post">
+                    {% csrf_token %}
+                </form>
+                <a class="btn btn-secondary" href="{% url 'hworks:hwork_update' hwork.id %}">Редактировать</a>
+                <a class="btn btn-secondary" onclick="document.getElementById('is_archived_form_{{ hwork.id}}').submit();">
+                    {% if hwork.is_archived %}
+                        Активировать
+                    {% else %}
+                        Отправить в архив
+                    {% endif %}
+                </a></br>
                 Описание:</br>
                 <p>{{ hwork.description }}</p>
                 </article>

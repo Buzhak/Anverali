@@ -1,0 +1,57 @@
+{% if orders|length == 0 %}
+    Тут пока пусто
+{% else %}
+    {% for order in orders %}
+        <article>
+        <h5>{{ order.title }}</h5>
+        <ul>
+            <li>
+                Продавец: <a href= "{% url 'hworks:profile' order.hwork.user %}">{{ order.hwork.user }}</a>
+            </li>
+            <li>
+                Заказчик: <a href= "{% url 'hworks:profile' order.customer %}">{{ order.customer }}</a>
+            </li>
+            <li>
+                Стоимость: {{ order.price }}
+            </li>
+            <li>
+                {% if order.is_ready %}
+                    Работа выполнена
+                {% else %}
+                    Заказ в работе
+                {% endif %}
+            </li>
+            {% if order.is_finished %}
+                <li>
+                    Заказ завершён
+                </li>
+            {% endif %}
+            {% if user == order.hwork.user and order.is_finished == False %}
+            <li>
+                <form id="is_ready_form_{{ order.id }}" action="{% url 'hworks:order_ready' order.id %}" method="post">
+                    {% csrf_token %}
+                </form> 
+                <a class="btn btn-success" onclick="document.getElementById('is_ready_form_{{ order.id }}').submit();">
+                    {% if order.is_ready %}
+                        Отменить готовность
+                    {% else %}
+                        Работа сделана
+                    {% endif %}
+                </a>
+            </li>
+            {% endif %}
+            {% if user == order.customer and order.is_ready == True and order.is_finished == False %}
+            <li>
+                <form id="is_finished_form_{{ order.id }}" action="{% url 'hworks:order_finished' order.id %}" method="post">
+                    {% csrf_token %}
+                </form>
+                <a class="btn btn-success" onclick="document.getElementById('is_finished_form_{{ order.id }}').submit();">Работа сделана</a>
+            </li>
+            {% endif %}
+        </ul>
+        Описание:</br>
+        <p>{{ order.description }}</p>
+        </article>
+        {% if not forloop.last %}<hr>{% endif %}
+    {% endfor %}
+{% endif %}
