@@ -88,7 +88,7 @@ python manage.py runserver
 
 5. Тестовую БД для джанго я оставил с проектом: login: admin, pass: admin
 
-<a id="postgress"></a>
+<a id="postgres"></a>
 ## База Postgres
 
 Если сильно хочется, то можно развенуть локальный контейнер с postgres
