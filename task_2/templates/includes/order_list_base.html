@@ -16,14 +16,14 @@
             </li>
             <li>
                 {% if order.is_ready %}
-                    Работа выполнена
+                    <span style="color: green">Работа выполнена</span>
                 {% else %}
-                    Заказ в работе
+                <span style="color: orange">Заказ в работе</span>
                 {% endif %}
             </li>
             {% if order.is_finished %}
                 <li>
-                    Заказ завершён
+                    <span style="color: green">Заказ завершён</span>
                 </li>
             {% endif %}
             {% if user == order.hwork.user and order.is_finished == False %}
