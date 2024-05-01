@@ -145,3 +145,6 @@ flake8
 * pytest
 * Docker-compose
 * Postgres
+
+![darktide-adeptus-mechanicus](https://github.com/Buzhak/Anverali/assets/47240390/3d8f3c46-9ae4-4ebf-a16a-3a209be5ae51)
+
