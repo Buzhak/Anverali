@@ -76,7 +76,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'app.wsgi.application'
 
 
-# Database
+# Database SQLite3
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
@@ -86,6 +86,17 @@ DATABASES = {
     }
 }
 
+# Database postgres
+# DATABASES = {
+#     'default': {
+#             'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+#             'NAME': os.getenv('DB_NAME', default='postgres'),
+#             'USER': os.getenv('POSTGRES_USER', default='postgres'),
+#             'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
+#             'HOST': os.getenv('DB_HOST', default='db'),
+#             'PORT': os.getenv('DB_PORT', default='5432')
+#         }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
