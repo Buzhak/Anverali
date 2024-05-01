@@ -94,19 +94,22 @@ python manage.py runserver
 ```
 docker-compose up -d --build
 ```
-3. Далее из каталога task_2 накатываем миграции
+
+3. Идём в task_2/app/settings.py комментируем настройка для работы с sqlite и раскомментируем настройка postgres
+
+4. Далее из каталога task_2 накатываем миграции
 
 ```
 python manage.py migrate
 ```
 
-4. Создаём суперюзера
+5. Создаём суперюзера
 
 ```
 python manage.py createsuperuser
 ```
 
-5. Стартуем:
+6. Стартуем:
 
 ```
 python manage.py runserver
