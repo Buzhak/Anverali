@@ -78,15 +78,17 @@ class HworkList(ListView):
 @login_required
 def my_hworks(request):
     '''
-    view текущего пользователя
+    view текущего продавца
     '''
-    user = get_object_or_404(User, username=request.user)
-    hworks = Hwork.objects.filter(user=user)
-    context = {
-        'hworks': hworks
-    }
-    template = 'hworks/my_hworks.html'
-    return render(request, template, context)
+    if request.user.is_freelancer:
+        user = get_object_or_404(User, username=request.user)
+        hworks = Hwork.objects.filter(user=user)
+        context = {
+            'hworks': hworks
+        }
+        template = 'hworks/my_hworks.html'
+        return render(request, template, context)
+    raise PermissionDenied()
 
 
 @login_required
@@ -180,7 +182,7 @@ def order_ready_view(request, pk):
             is_finished=False
         ).select_related('hwork__user').first()
         if not order:
-            raise Http404('Заказ не найден')
+            raise Http404()
         if order.hwork.user == request.user:
             order.is_ready = not order.is_ready
             order.save()
@@ -200,7 +202,7 @@ def order_finished_view(request, pk):
         previous_url = request.META.get('HTTP_REFERER')
         order = Order.objects.filter(pk=pk, is_ready=True, is_finished=False).first()
         if not order:
-            raise Http404('Заказ не найден')
+            raise Http404()
         if order.customer == request.user:
             order.is_finished = True
             order.save()
